@@ -1,4 +1,4 @@
-import Canvas from "./ui/canvas";
+import Canvas from "./ui/tag-tool/canvas";
 
 export default function Home() {
   return (

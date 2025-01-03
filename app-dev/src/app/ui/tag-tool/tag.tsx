@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import { Rectangle } from '../canvas';
+import { Rectangle } from './canvas';
 import Konva from 'konva';
 import { Rect, Transformer } from 'react-konva';
 
@@ -50,8 +50,10 @@ export default function Tag ({ tagProps, isSelected, onSelect, onChange }: TagPr
   return (
     <>
       <Rect
+        name='tag'
         onMouseDown={onSelect}
         ref={shapeRef}
+        fill='transparent'
         {...tagProps}
         draggable
         onDragEnd={(e) => {

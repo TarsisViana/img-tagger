@@ -3,8 +3,9 @@
 import Konva from 'konva';
 import { useRef, useState } from 'react'
 import { Stage, Layer, Rect } from 'react-konva'
-import Tag from './tag-tool/tag';
+import Tag from './tag';
 import { KonvaEventObject } from 'konva/lib/Node';
+import BaseImage from './base-image';
 
 
 export interface Rectangle  {
@@ -31,24 +32,15 @@ export default function Canvas() {
   const [rectList, setRectList] = useState<Rectangle[]>([initialRect]);
   const [selectedId, selectShape] = useState<string | null>(null);
   const [isDrawing, setDrawing] = useState(false);
-  
+
 
   const stageRef = useRef<Konva.Stage>(null);
   const constructorRef = useRef<Konva.Rect>(null);
 
 
-  const checkDeselect = (node:  Konva.Node) => {
-    // deselect when clicked on empty area
-    const clickedOnEmpty = node === node.getStage();
-    if (clickedOnEmpty) {
-      selectShape(null);
-    }
-  };
-
   function handleMouseDown(e: KonvaEventObject<MouseEvent, Konva.Node>) {
-    checkDeselect(e.target)
+    const clickedOnTag = e.target.name() === 'tag'
     
-    const clickedOnTag = e.target.name() !== 'canvas'
     if (!clickedOnTag) {
       const node = stageRef.current
       const constructor = constructorRef.current;
@@ -149,6 +141,7 @@ export default function Canvas() {
           ref={stageRef}
           className='border border-secondary-subtle'
         >
+          <BaseImage selectShape={selectShape} />
           <Layer>
             {rectList.map((rect, index) => {
               return (
