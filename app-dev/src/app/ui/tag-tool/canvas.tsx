@@ -1,7 +1,7 @@
 'use client'
 
 import Konva from 'konva';
-import { useRef, useState } from 'react'
+import { use, useRef, useState } from 'react'
 import { Stage, Layer, Rect } from 'react-konva'
 import Tag from './tag';
 import { KonvaEventObject } from 'konva/lib/Node';
@@ -32,6 +32,11 @@ export default function Canvas() {
   const [rectList, setRectList] = useState<Rectangle[]>([initialRect]);
   const [selectedId, selectShape] = useState<string | null>(null);
   const [isDrawing, setDrawing] = useState(false);
+  const [imageAtr, setImageAtr] = useState(null);
+
+  //stage size
+  const [height, setHeight] = useState(500) 
+  const [scale, setScale] = useState(1)
 
 
   const stageRef = useRef<Konva.Stage>(null);
@@ -83,7 +88,7 @@ export default function Canvas() {
         width: constructor.width(),
         height: constructor.height(),
         stroke: 'yellow',
-        strokeWidth: 3,
+        strokeWidth: 3/scale,
         id: crypto.randomUUID(),
       };
       const tagArr = rectList
@@ -133,7 +138,9 @@ export default function Canvas() {
       <div className='col-9 justify-content-center d-flex'>
         <Stage
           width={800}
-          height={500}
+          height={height}
+          scaleX={scale}
+          scaleY={scale}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -141,7 +148,12 @@ export default function Canvas() {
           ref={stageRef}
           className='border border-secondary-subtle'
         >
-          <BaseImage selectShape={selectShape} />
+          <BaseImage
+            selectShape={selectShape}
+            setImageAtr={setImageAtr}
+            setScale={setScale}
+            setHeight={setHeight}
+          />
           <Layer>
             {rectList.map((rect, index) => {
               return (
@@ -164,7 +176,7 @@ export default function Canvas() {
               ref={constructorRef}
               draggable
               stroke= 'grey'
-              strokeWidth={5}
+              strokeWidth={5/scale}
             />
           </Layer>
         </Stage>
